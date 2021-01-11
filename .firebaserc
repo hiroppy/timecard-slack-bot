@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "dev": "timecard-slack-bot",
+    "prod": "timecard-slack-bot-prod"
+  }
+}
