@@ -13,30 +13,35 @@ const app = new App({
   token: config.slack.token,
 });
 
-app.command("/timecard", async ({say, ack, body, command}) => {
+app.command("/timecard", async ({ack, body, command}) => {
   const {user_id: userId, user_name: userName, team_id: teamId} = body;
 
-  await ack();
+  async function respond(text: string) {
+    await ack({
+      response_type: "in_channel",
+      text,
+    });
+  }
 
   try {
     switch (command.text) {
       case "hello":
-        await say(await hello(userId));
+        await respond(await hello(userId));
         break;
       case "bye":
-        await say(await bye(userId));
+        await respond(await bye(userId));
         break;
       case "add me":
-        await say(await addMe({userId, userName, teamId}));
+        await respond(await addMe({userId, userName, teamId}));
         break;
       case "src":
-        await say("src: https://github.com/hiroppy/timecard-slack-bot");
+        await respond("src: https://github.com/hiroppy/timecard-slack-bot");
         break;
       default:
         throw new Error("no command, you can choose hello/bye");
     }
   } catch (e) {
-    await say(e.message);
+    await respond(e.message);
   }
 });
 
